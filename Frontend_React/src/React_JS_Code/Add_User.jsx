@@ -7,7 +7,7 @@ function Add_User() {
 
     const handleRoleChange = (e) => {
         setRole(e.target.value);
-        setFormData({}); // reset form
+        setFormData({});
     };
 
     const handleChange = (e) => {
@@ -24,7 +24,7 @@ function Add_User() {
                 role,
                 ...formData
             });
-            alert('User added successfully');
+            alert(`${role} added successfully`);
             console.log(response.data);
         } catch (err) {
             console.error(err);
@@ -47,16 +47,19 @@ function Add_User() {
 
             {role === 'Centre' && (
                 <form onSubmit={handleSubmit}>
-                    <input name="Center_ID" placeholder="Center ID" onChange={handleChange} required /><br />
-                    <input name="Center_Name" placeholder="Center Name" onChange={handleChange} required /><br />
-                    <input name="Address" placeholder="Address" onChange={handleChange} /><br />
+                    <input name="Center_ID" placeholder="Centre ID" onChange={handleChange} required /><br />
+                    <input name="Center_Name" placeholder="Centre Name" onChange={handleChange} required /><br />
                     <input name="Building_Name" placeholder="Building Name" onChange={handleChange} /><br />
+
+                    <input name="area" placeholder="Area" onChange={handleChange} required /><br />
+                    <input name="city_id" placeholder="City ID" onChange={handleChange} required /><br />
                     <input name="Pincode" placeholder="Pincode" onChange={handleChange} required /><br />
-                    <input name="Center_Admin" placeholder="Center Admin" onChange={handleChange} /><br />
-                    <input name="Admin_ID" placeholder="Admin ID" onChange={handleChange} required /><br />
+
+                    <input name="Admin_ID" placeholder="Centre Admin ID" onChange={handleChange} required /><br />
                     <input name="Admin_Password" placeholder="Admin Password" onChange={handleChange} required type="password" /><br />
-                    <input name="Admin_Number" placeholder="Admin Phone" onChange={handleChange} /><br />
-                    <input name="Admin_Email" placeholder="Admin Email" onChange={handleChange} /><br />
+                    <input name="Admin_Number" placeholder="Admin Phone" onChange={handleChange} required /><br />
+                    <input name="Admin_Email" placeholder="Admin Email" onChange={handleChange} required /><br />
+
                     <button type="submit">Add Centre</button>
                 </form>
             )}

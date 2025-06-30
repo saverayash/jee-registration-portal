@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
 function StudentQuery() {
     const [queryText, setQueryText] = useState('');
     const [paperSetterId, setPaperSetterId] = useState('');
-    const [studentId,setStudentId]=useState('');
+    const [studentId, setStudentId] = useState('');
     const [message, setMessage] = useState('');
     const [queries, setQueries] = useState([]);
+
     useEffect(() => {
         const id = localStorage.getItem('id');
-        if (id) {
-            setStudentId(id);
-        }
+        if (id) setStudentId(id);
     }, []);
+
     const handleSubmit = async (e) => {
-       
         e.preventDefault();
         try {
             await axios.post('http://localhost:3000/q/ask', {
-                queryText,
-                studentId,
-                paperSetterId
+                query_text: queryText,
+                student_id: parseInt(studentId),
+                paper_setter_id: parseInt(paperSetterId)
             });
             setMessage('Query submitted successfully.');
             setQueryText('');
@@ -34,16 +32,15 @@ function StudentQuery() {
 
     const fetchQueries = async () => {
         try {
-            const res = await axios.post(`http://localhost:3000/q/student/${studentId}`);
+            const res = await axios.get(`http://localhost:3000/q/student/${studentId}`);
             setQueries(res.data);
-            //console.log(res);
         } catch (err) {
             console.error('Error fetching queries', err);
         }
     };
 
     useEffect(() => {
-        fetchQueries();
+        if (studentId) fetchQueries();
     }, [studentId]);
 
     return (

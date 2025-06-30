@@ -4,12 +4,11 @@ import axios from 'axios';
 function PaperView() {
     const [questions, setQuestions] = useState([]);
     const [paperId, setPaperId] = useState('');
-    const [langId, setLangId] = useState('');
     const [submitted, setSubmitted] = useState(false);
 
     const fetchQuestions = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/paper/${paperId}/${langId}`);
+            const res = await axios.get(`http://localhost:3000/paper/${paperId}`);
             setQuestions(res.data);
             setSubmitted(true);
         } catch (err) {
@@ -27,13 +26,7 @@ function PaperView() {
                 onChange={(e) => setPaperId(e.target.value)}
                 style={{ marginRight: '10px' }}
             />
-            <input
-                type="number"
-                placeholder="Language ID"
-                value={langId}
-                onChange={(e) => setLangId(e.target.value)}
-                style={{ marginRight: '10px' }}
-            />
+            
             <button onClick={fetchQuestions}>View Questions</button>
 
             {submitted && questions.length === 0 && <p>No questions found.</p>}
@@ -42,11 +35,11 @@ function PaperView() {
                 <div key={index} style={{ marginTop: '20px', border: '1px solid #ccc', padding: '10px' }}>
                     <p><strong>Q{q.que_no}.</strong></p>
                     <ul>
-                        <li>A. {q.choice_a}</li>
-                        <li>B. {q.choice_b}</li>
-                        <li>C. {q.choice_c}</li>
-                        <li>D. {q.choice_d}</li>
-                        <li>Correct Answer : {q.correct_choice}</li>
+                        <li>A. {q.option_a}</li>
+                        <li>B. {q.option_b}</li>
+                        <li>C. {q.option_c}</li>
+                        <li>D. {q.option_d}</li>
+                        <li>Correct Answer : {q.correct_answer}</li>
                     </ul>
                 </div>
             ))}

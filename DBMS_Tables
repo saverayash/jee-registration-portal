@@ -1,0 +1,139 @@
+-- ===========================
+-- TABLE: Centre
+-- ===========================
+CREATE TABLE Centre (
+    Centre_ID  SERIAL PRIMARY KEY,
+    Centre_Name VARCHAR(100),
+    Centre_Admin VARCHAR(100),
+    Centre_Password VARCHAR(255),
+    Centre_Number VARCHAR(15),
+    Centre_Email VARCHAR(100)
+);
+
+-- ===========================
+-- TABLE: Address
+-- ===========================
+CREATE TABLE Address (
+    Address_Id  SERIAL PRIMARY KEY,
+    Area VARCHAR(100),
+    City VARCHAR(100),
+    District VARCHAR(100),
+    State VARCHAR(100),
+    Country VARCHAR(100),
+    Pincode VARCHAR(10)
+);
+
+-- ===========================
+-- TABLE: Student
+-- ===========================
+CREATE TABLE Student (
+    Student_Id  SERIAL PRIMARY KEY,
+    Password VARCHAR(255),
+    First_Name VARCHAR(100),
+    Middle_Name VARCHAR(100),
+    Last_Name VARCHAR(100),
+    DOB DATE,
+    Gender VARCHAR(10),
+    Category VARCHAR(50),
+    HSC_Board_Name VARCHAR(100),
+    HSC_Seat_No VARCHAR(20),
+    Aadhar_Card_No VARCHAR(20) UNIQUE,
+    Email VARCHAR(100) UNIQUE,
+    Phone_No VARCHAR(15),
+    Adv_Centre INT,
+    Main_Centre INT,
+    Address_Id INT,
+    FOREIGN KEY (Adv_Centre) REFERENCES Centre(Centre_ID),
+    FOREIGN KEY (Main_Centre) REFERENCES Centre(Centre_ID),
+    FOREIGN KEY (Address_Id) REFERENCES Address(Address_Id)
+);
+
+-- ===========================
+-- TABLE: Result (Weak Entity)
+-- ===========================
+CREATE TABLE Result (
+    Result_Id  SERIAL PRIMARY KEY,
+    Student_Id INT,
+    Physics_Mark INT,
+    Chemistry_Mark INT,
+    Maths_Mark INT,
+    AIR INT,
+    Category_Rank INT,
+    Qualification_Status BOOLEAN,
+    FOREIGN KEY (Student_Id) REFERENCES Student(Student_Id)
+);
+
+-- ===========================
+-- TABLE: Admin
+-- ===========================
+CREATE TABLE Admin (
+    Admin_Id  SERIAL PRIMARY KEY,
+    Password VARCHAR(255),
+    Qualification VARCHAR(100),
+    Email_ID VARCHAR(100)
+);
+
+-- ===========================
+-- TABLE: Announcement
+-- ===========================
+CREATE TABLE Announcement (
+    Announcement_Id  SERIAL PRIMARY KEY,
+    Announcement_Text TEXT,
+    Status BOOLEAN,
+    Admin_Id INT,
+    FOREIGN KEY (Admin_Id) REFERENCES Admin(Admin_Id)
+);
+
+-- ===========================
+-- TABLE: Paper_Setter
+-- ===========================
+CREATE TABLE Paper_Setter (
+    Paper_Setter_Id  SERIAL PRIMARY KEY,
+    Password VARCHAR(255),
+    Full_Name VARCHAR(100),
+    Qualification VARCHAR(100),
+    University VARCHAR(100),
+    Email_Id VARCHAR(100)
+);
+
+-- ===========================
+-- TABLE: Paper
+-- ===========================
+CREATE TABLE Paper (
+    Paper_Id  INT,
+    Language_Id INT,
+    Paper_Setter_Id INT,
+    Date DATE,
+    Shift VARCHAR(20),
+    Total_Student INT,
+    FOREIGN KEY (Paper_Setter_Id) REFERENCES Paper_Setter(Paper_Setter_Id),
+    PRIMARY KEY Paper_Id,Language_Id,
+);
+
+-- ===========================
+-- TABLE: Question (Weak Entity)
+-- ===========================
+CREATE TABLE Question (
+    Que_No SERIAL PRIMARY KEY,
+    Paper_Id INT,
+    Option_A TEXT,
+    Option_B TEXT,
+    Option_C TEXT,
+    Option_D TEXT,
+    Correct_Answer CHAR(1),
+    Score INT,
+    FOREIGN KEY (Paper_Id) REFERENCES Paper(Paper_Id)
+);
+
+-- ===========================
+-- TABLE: Query (Student ↔ Setter)
+-- ===========================
+CREATE TABLE Query (
+    Query_Id SERIAL PRIMARY KEY,
+    Query_Text TEXT,
+    Student_Id INT,
+    Paper_Setter_Id INT,
+    Response_Text TEXT,
+    FOREIGN KEY (Student_Id) REFERENCES Student(Student_Id),
+    FOREIGN KEY (Paper_Setter_Id) REFERENCES Paper_Setter(Paper_Setter_Id)
+);

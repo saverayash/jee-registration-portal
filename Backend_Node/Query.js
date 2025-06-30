@@ -2,13 +2,18 @@ const express = require('express');
 const router = express.Router();
 const client = require('./Client');
 
+// 📩 Student submits a query
 router.post('/ask', async (req, res) => {
-    const { queryText, studentId, paperSetterId } = req.body;
-    console.log(req.body);
+    const { query_text, student_id, paper_setter_id } = req.body;
+
+    if (!query_text || !student_id || !paper_setter_id) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+
     try {
         await client.query(
-            `INSERT INTO Query (Query_Text, Student_ID, Paper_Setter_ID) VALUES ($1, $2, $3)`,
-            [queryText, studentId, paperSetterId]
+            `INSERT INTO Query (Query_Text, Student_Id, Paper_Setter_Id) VALUES ($1, $2, $3)`,
+            [query_text, student_id, paper_setter_id]
         );
         res.json({ message: 'Query submitted successfully' });
     } catch (err) {
@@ -17,12 +22,17 @@ router.post('/ask', async (req, res) => {
     }
 });
 
+// 📝 Paper Setter responds to a query
 router.post('/respond', async (req, res) => {
-    const { queryId, responseText } = req.body;
+    const { query_id, response_text } = req.body;
+    if (!query_id || !response_text) {
+        return res.status(400).json({ message: 'Query ID and response are required.' });
+    }
+
     try {
         await client.query(
-            `UPDATE Query SET Response_Text = $1 WHERE Query_ID = $2`,
-            [responseText, queryId]
+            `UPDATE Query SET Response_Text = $1 WHERE Query_Id = $2`,
+            [response_text, query_id]
         );
         res.json({ message: 'Response submitted successfully' });
     } catch (err) {
@@ -31,11 +41,11 @@ router.post('/respond', async (req, res) => {
     }
 });
 
-router.post('/student/:id', async (req, res) => {
-    
+// 📥 Student views their queries
+router.get('/student/:id', async (req, res) => {
     try {
         const result = await client.query(
-            `SELECT * FROM Query WHERE Student_ID = $1`,
+            `SELECT * FROM Query WHERE Student_Id = $1 ORDER BY Query_Id DESC`,
             [req.params.id]
         );
         res.json(result.rows);
@@ -45,10 +55,11 @@ router.post('/student/:id', async (req, res) => {
     }
 });
 
-router.post('/paper_setter/:id', async (req, res) => {
+// 📥 Paper Setter views queries sent to them
+router.get('/paper_setter/:id', async (req, res) => {
     try {
         const result = await client.query(
-            `SELECT * FROM Query WHERE Paper_Setter_ID = $1`,
+            `SELECT * FROM Query WHERE Paper_Setter_Id = $1 ORDER BY Query_Id DESC`,
             [req.params.id]
         );
         res.json(result.rows);
@@ -57,28 +68,5 @@ router.post('/paper_setter/:id', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch queries' });
     }
 });
-// router.get('/student/:id', async (req, res) => {
-//     try {
-//         const result = await client.query(
-//             `SELECT * FROM Query WHERE Student_ID = $1`,
-//             [req.params.id]
-//         );
-//         res.json(result.rows);
-//     } catch (err) {
-//         res.status(500).json({ message: 'Failed to fetch student queries' });
-//     }
-// });
-
-// router.get('/paper_setter/:id', async (req, res) => {
-//     try {
-//         const result = await client.query(
-//             `SELECT * FROM Query WHERE Paper_Setter_ID = $1`,
-//             [req.params.id]
-//         );
-//         res.json(result.rows);
-//     } catch (err) {
-//         res.status(500).json({ message: 'Failed to fetch queries' });
-//     }
-// });
 
 module.exports = router;

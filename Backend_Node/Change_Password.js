@@ -4,24 +4,23 @@ const client = require('./Client');
 const jwt = require('jsonwebtoken');
 
 const roleConfigs = {
-    Student: { table: 'Student', idCol: 'ID', passCol: 'Password' },
-    Admin: { table: 'Admin', idCol: 'Admin_ID', passCol: 'Password' },
-    Paper_Setter: { table: 'Paper_Setter', idCol: 'Paper_Setter_ID', passCol: 'Login_Password' },
-    Centre: { table: 'Center', idCol: 'Admin_ID', passCol: 'Admin_Password' }
+    Student: { table: 'student', idCol: 'student_id', passCol: 'password' },
+    Admin: { table: 'admin', idCol: 'admin_id', passCol: 'password' },
+    Paper_Setter: { table: 'paper_setter', idCol: 'paper_setter_id', passCol: 'password' },
+    Centre: { table: 'centre', idCol: 'centre_id', passCol: 'centre_password' }
 };
 
 router.post('/', async (req, res) => {
     const { oldPassword, newPassword, id, role } = req.body;
 
-   // console.log(oldPassword + " " + newPassword + " " + id + " " + role);
-
-    if (!roleConfigs[role]) {
+    if (!role || !roleConfigs[role]) {
         return res.status(400).json({ message: 'Invalid role' });
     }
 
     const { table, idCol, passCol } = roleConfigs[role];
 
     try {
+        // Step 1: Verify old password
         const selectQuery = `SELECT * FROM ${table} WHERE ${idCol} = $1 AND ${passCol} = $2`;
         const selectValues = [id, oldPassword];
         const selectResult = await client.query(selectQuery, selectValues);
@@ -30,6 +29,7 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ message: 'Old password is incorrect' });
         }
 
+        // Step 2: Update to new password
         const updateQuery = `UPDATE ${table} SET ${passCol} = $1 WHERE ${idCol} = $2`;
         const updateValues = [newPassword, id];
         await client.query(updateQuery, updateValues);

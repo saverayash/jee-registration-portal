@@ -7,6 +7,7 @@ function StudentCenters() {
     const [error, setError] = useState('');
 
     const studentId = localStorage.getItem('id'); 
+
     useEffect(() => {
         const fetchCenters = async () => {
             try {
@@ -32,9 +33,9 @@ function StudentCenters() {
                 <h3>Main Center</h3>
                 {mainCenter ? (
                     <div>
-                        <p><strong>Name:</strong> {mainCenter.center_name}</p>
-                        <p><strong>Address:</strong> {mainCenter.address}</p>
-                        <p><strong>Status:</strong> {mainCenter.status}</p>
+                        <p><strong>Name:</strong> {mainCenter.centre_name}</p>
+                        <p><strong>Email:</strong> {mainCenter.centre_email}</p>
+                        <p><strong>Phone:</strong> {mainCenter.centre_number}</p>
                     </div>
                 ) : <p>No Main Center Assigned</p>}
             </div>
@@ -43,8 +44,9 @@ function StudentCenters() {
                 <h3>Advance Center</h3>
                 {advCenter ? (
                     <div>
-                        <p><strong>Name:</strong> {advCenter.center_name}</p>
-                        <p><strong>Address:</strong> {advCenter.address}</p>
+                        <p><strong>Name:</strong> {advCenter.centre_name}</p>
+                        <p><strong>Email:</strong> {advCenter.centre_email}</p>
+                        <p><strong>Phone:</strong> {advCenter.centre_number}</p>
                     </div>
                 ) : <p>No Advance Center Assigned</p>}
             </div>

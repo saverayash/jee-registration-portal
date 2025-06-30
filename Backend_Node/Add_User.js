@@ -8,27 +8,37 @@ router.post('/', async (req, res) => {
     try {
         if (role === 'Centre') {
             const {
-                Center_ID, Center_Name, Address, Building_Name, Pincode,
-                Center_Admin, Admin_ID, Admin_Password, Admin_Number, Admin_Email
+                Centre_Name, Centre_Admin, Centre_Password,
+                Centre_Number, Centre_Email, Area, City_Id, Pincode
             } = data;
 
+            // 1. Insert into Address table
+            const addressResult = await client.query(
+                `INSERT INTO Address (Area, City_Id, Pincode)
+                 VALUES ($1, $2, $3) RETURNING Address_Id`,
+                [Area, City_Id, Pincode]
+            );
+            const address_id = addressResult.rows[0].address_id;
+
+            // 2. Insert into Centre table
             await client.query(
-                `INSERT INTO Center (Center_ID, Center_Name, Address, Building_Name, Pincode, Center_Admin, Admin_ID, Admin_Password, Admin_Number, Admin_Email)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
-                [Center_ID, Center_Name, Address, Building_Name, Pincode, Center_Admin, Admin_ID, Admin_Password, Admin_Number, Admin_Email]
+                `INSERT INTO Centre (Centre_Name, Centre_Admin, Centre_Password, Centre_Number, Centre_Email)
+                 VALUES ($1, $2, $3, $4, $5)`,
+                [Centre_Name, Centre_Admin, Centre_Password, Centre_Number, Centre_Email]
             );
 
         } else if (role === 'Paper_Setter') {
             const {
-                Paper_Setter_ID, Paper_ID, Login_Password, Full_Name,
-                Qualification, College_University, Email_id
+                Paper_Setter_Id,Password, Full_Name, Qualification,
+                University, Email_Id
             } = data;
 
             await client.query(
-                `INSERT INTO Paper_Setter (Paper_Setter_ID, Paper_ID, Login_Password, Full_Name, Qualification, College_University, Email_id)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7)`,
-                [Paper_Setter_ID, Paper_ID, Login_Password, Full_Name, Qualification, College_University, Email_id]
+                `INSERT INTO Paper_Setter (Paper_Setter_Id,Password, Full_Name, Qualification, University, Email_Id)
+                 VALUES ($1, $2, $3, $4, $5,$6)`,
+                [Paper_Setter_Id,Password, Full_Name, Qualification, University, Email_Id]
             );
+
         } else {
             return res.status(400).json({ message: 'Invalid role' });
         }

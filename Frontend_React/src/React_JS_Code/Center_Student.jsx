@@ -37,7 +37,7 @@ function CenterStudentList() {
                     <tbody>
                         {students.map((s) => (
                             <tr key={s.id}>
-                                <td>{s.id}</td>
+                                <td>{s.student_id}</td>
                                 <td>{s.first_name}</td>
                                 <td>{s.last_name}</td>
                                 <td>{s.assignment_type}</td>

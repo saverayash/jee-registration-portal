@@ -1,35 +1,45 @@
 const express = require('express');
 const router = express.Router();
-const client = require('./Client'); 
+const client = require('./Client');
 
-router.get('/:studentId', async (req, res) => {
-    const { studentId } = req.params;
+router.get('/:id', async (req, res) => {
+    const studentId = req.params.id;
 
     try {
-        const mainQuery = `
-            SELECT m.Center_ID, c.Center_Name, c.Address, m.Status
-            FROM Main_center m
-            JOIN Center c ON m.Center_ID = c.Center_ID
-            WHERE m.ID = $1
-        `;
-        const mainResult = await client.query(mainQuery, [studentId]);
+        const studentQuery = await client.query(
+            `SELECT Main_Centre, Adv_Centre FROM Student WHERE Student_Id = $1`,
+            [studentId]
+        );
 
-        const advQuery = `
-            SELECT a.Center_ID, c.Center_Name, c.Address
-            FROM Adv_center a
-            JOIN Center c ON a.Center_ID = c.Center_ID
-            WHERE a.ID = $1
-        `;
-        const advResult = await client.query(advQuery, [studentId]);
+        if (studentQuery.rows.length === 0) {
+            return res.status(404).json({ error: 'Student not found' });
+        }
+
+        const { main_centre, adv_centre } = studentQuery.rows[0];
+
+        // Fetch Main Centre details
+        const mainCenterQuery = main_centre
+            ? await client.query(
+                  `SELECT Centre_Name, Centre_Email, Centre_Number FROM Centre WHERE Centre_Id = $1`,
+                  [main_centre]
+              )
+            : { rows: [] };
+
+        // Fetch Advance Centre details
+        const advCenterQuery = adv_centre
+            ? await client.query(
+                  `SELECT Centre_Name, Centre_Email, Centre_Number FROM Centre WHERE Centre_Id = $1`,
+                  [adv_centre]
+              )
+            : { rows: [] };
 
         res.json({
-            mainCenter: mainResult.rows[0] || null,
-            advCenter: advResult.rows[0] || null
+            mainCenter: mainCenterQuery.rows[0] || null,
+            advCenter: advCenterQuery.rows[0] || null,
         });
-
-    } catch (error) {
-        console.error('Error fetching center info:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+    } catch (err) {
+        console.error('Error fetching center details:', err);
+        res.status(500).json({ error: 'Error fetching center details' });
     }
 });
 

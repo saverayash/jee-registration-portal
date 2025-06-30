@@ -48,8 +48,8 @@ function Admin_Center() {
                 <select onChange={(e) => setSelectedStudent(e.target.value)} value={selectedStudent}>
                     <option value="">--Select Student--</option>
                     {students.map((s) => (
-                        <option key={s.id} value={s.id}>
-                            {s.name} (ID: {s.id})
+                        <option key={s.student_id} value={s.student_id}>
+                            {s.first_name} {s.last_name} (ID: {s.student_id})
                         </option>
                     ))}
                 </select>
@@ -60,8 +60,8 @@ function Admin_Center() {
                 <select onChange={(e) => setMainCenter(e.target.value)} value={mainCenter}>
                     <option value="">--Select Main Center--</option>
                     {centers.map((c) => (
-                        <option key={c.center_id} value={c.center_id}>
-                            {c.center_name}
+                        <option key={c.centre_id} value={c.centre_id}>
+                            {c.centre_name}
                         </option>
                     ))}
                 </select>
@@ -79,8 +79,8 @@ function Admin_Center() {
                 <select onChange={(e) => setAdvCenter(e.target.value)} value={advCenter}>
                     <option value="">--Select Advance Center--</option>
                     {centers.map((c) => (
-                        <option key={c.center_id} value={c.center_id}>
-                            {c.center_name}
+                        <option key={c.centre_id} value={c.centre_id}>
+                            {c.centre_name}
                         </option>
                     ))}
                 </select>

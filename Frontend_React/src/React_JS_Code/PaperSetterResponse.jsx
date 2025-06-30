@@ -5,35 +5,31 @@ function PaperSetterResponse() {
     const [queries, setQueries] = useState([]);
     const [responses, setResponses] = useState({});
     const [message, setMessage] = useState('');
-    const [paperSetterId,setPaperSetterId]=useState('');
+    const [paperSetterId, setPaperSetterId] = useState('');
 
     useEffect(() => {
-            const id = localStorage.getItem('id');
-            if (id) {
-                setPaperSetterId(id);
-            }
-        }, []);
+        const id = localStorage.getItem('id');
+        if (id) setPaperSetterId(id);
+    }, []);
 
-        useEffect(() => {
-            fetchQueries();
-        }, [paperSetterId]);
+    useEffect(() => {
+        if (paperSetterId) fetchQueries();
+    }, [paperSetterId]);
 
     const fetchQueries = async () => {
         try {
-            const res = await axios.post(`http://localhost:3000/q/paper_setter/${paperSetterId}`);
+            const res = await axios.get(`http://localhost:3000/q/paper_setter/${paperSetterId}`);
             setQueries(res.data);
         } catch (err) {
             console.error('Error fetching queries', err);
         }
     };
 
-    
-
     const handleResponse = async (queryId) => {
         try {
             await axios.post('http://localhost:3000/q/respond', {
-                queryId,
-                responseText: responses[queryId] || ''
+                query_id: queryId,
+                response_text: responses[queryId] || ''
             });
             setMessage('Response submitted');
             fetchQueries();

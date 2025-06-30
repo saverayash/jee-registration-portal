@@ -1,0 +1,110 @@
+-- ===========================
+-- Country
+-- ===========================
+INSERT INTO Country (Country_Id, Country_Name) VALUES 
+(1, 'India'),
+(2, 'Nepal');
+
+-- ===========================
+-- State
+-- ===========================
+INSERT INTO State (State_Id, State_Name, Country_Id) VALUES 
+(1, 'Maharashtra', 1),
+(2, 'Bihar', 1),
+(3, 'Bagmati', 2);
+
+-- ===========================
+-- District
+-- ===========================
+INSERT INTO District (District_Id, District_Name, State_Id) VALUES 
+(1, 'Pune', 1),
+(2, 'Patna', 2),
+(3, 'Kathmandu', 3);
+
+-- ===========================
+-- City
+-- ===========================
+INSERT INTO City (City_Id, City_Name, District_Id) VALUES 
+(1, 'Pimpri-Chinchwad', 1),
+(2, 'Patna City', 2),
+(3, 'Lalitpur', 3);
+
+-- ===========================
+-- Address
+-- ===========================
+INSERT INTO Address (Address_Id, Area, City_Id, Pincode) VALUES 
+(1, 'Wakad', 1, '411057'),
+(2, 'Rajendra Nagar', 2, '800016'),
+(3, 'Jhamsikhel', 3, '44700');
+
+-- ===========================
+-- Centre
+-- ===========================
+INSERT INTO Centre (Centre_ID, Centre_Name, Centre_Admin, Centre_Password, Centre_Number, Centre_Email) VALUES 
+(1, 'JEE Centre A', 'admin_centre_a', 'pass123', '9876543210', 'centrea@jee.com'),
+(2, 'JEE Centre B', 'admin_centre_b', 'pass456', '9876543211', 'centreb@jee.com');
+
+-- ===========================
+-- Admin
+-- ===========================
+INSERT INTO Admin (Admin_Id, Password, Qualification, Email_ID) VALUES 
+(1, 'adminpass', 'PhD in Math', 'admin1@jee.com'),
+(2, 'securepass', 'M.Tech in CS', 'admin2@jee.com');
+
+-- ===========================
+-- Student
+-- ===========================
+INSERT INTO Student (
+    Student_Id, Password, First_Name, Middle_Name, Last_Name, DOB, Gender, Category,
+    HSC_Board_Name, HSC_Seat_No, Aadhar_Card_No, Email, Phone_No,
+    Adv_Centre, Main_Centre, Address_Id,Main_Centre_Status,Adv_Centre_Status
+) VALUES
+(1, 'passyash', 'Yash', 'Kumar', 'Savera', '2003-08-15', 'Male', 'General', 'CBSE', 'CBSE2023A1001', '123456789012', 'yash@student.com', '9998887776', 1, 2, 1,0,0),
+(2, 'passaisha', 'Aisha', 'Rani', 'Khan', '2004-04-22', 'Female', 'OBC', 'Bihar Board', 'BSEB2023B2002', '123456789013', 'aisha@student.com', '9998887777', 2, 2, 2,0,0),
+(3, 'passrohan', 'Rohan', '', 'Joshi', '2003-12-10', 'Male', 'SC', 'NEB', 'NEB2023N3003', '123456789014', 'rohan@student.com', '9998887778', 1, 1, 3,0,0);
+
+-- ===========================
+-- Result
+-- ===========================
+INSERT INTO Result (Result_Id, Student_Id, Physics_Mark, Chemistry_Mark, Maths_Mark, AIR, Category_Rank, Qualification_Status) VALUES
+(1, 1, 75, 65, 85, 1200, 100, TRUE),
+(2, 2, 55, 50, 60, 5300, 1100, TRUE),
+(3, 3, 45, 35, 40, 8900, 3100, FALSE);
+
+-- ===========================
+-- Paper_Setter
+-- ===========================
+INSERT INTO Paper_Setter (Paper_Setter_Id, Password, Full_Name, Qualification, University, Email_Id) VALUES 
+(1, 'set123', 'Dr. Seema Patil', 'PhD Physics', 'IIT Bombay', 'seema@iitb.ac.in'),
+(2, 'set456', 'Dr. Akash Mehta', 'PhD Chemistry', 'IIT Delhi', 'akash@iitd.ac.in');
+
+-- ===========================
+-- Paper
+-- ===========================
+INSERT INTO Paper (Paper_Id, Paper_Setter_Id, Date, Shift, Total_Student) VALUES
+(1, 1, '2025-01-15', 'Morning', 500),
+(2, 2, '2025-01-16', 'Evening', 600);
+
+-- ===========================
+-- Question
+-- ===========================
+INSERT INTO Question (Que_No, Paper_Id, Option_A, Option_B, Option_C, Option_D, Correct_Answer, Score) VALUES
+(1, 1, '2', '3', '4', '5', 'C', 4),
+(2, 1, 'True', 'False', 'Both', 'None', 'A', 2),
+(1, 2, 'H2O', 'CO2', 'NaCl', 'O2', 'A', 3),
+(2, 2, 'Red', 'Blue', 'Green', 'Yellow', 'B', 2);
+
+-- ===========================
+-- Query
+-- ===========================
+INSERT INTO Query (Query_Id, Query_Text, Student_Id, Paper_Setter_Id, Response_Text) VALUES
+(1, 'Will there be negative marking?', 1, 1, 'Yes, -1 for each wrong answer.'),
+(2, 'What is syllabus weightage?', 2, 2, 'Physics and Math carry more weightage.'),
+(3, 'Are calculators allowed?', 3, 1, 'No calculators allowed.');
+
+-- ===========================
+-- Announcement
+-- ===========================
+INSERT INTO Announcement (Announcement_Id, Announcement_Text, Status, Admin_Id) VALUES 
+(1, 'Results will be out on 25th Jan.', TRUE, 1),
+(2, 'Admit cards released.', TRUE, 2);

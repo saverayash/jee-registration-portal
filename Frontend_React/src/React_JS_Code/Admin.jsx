@@ -40,9 +40,7 @@ function Admin() {
             >See Reported Students
                 </button>
                 <br/>
-                <button onClick={()=>handlenavigate('/publish')} style={styles.NavigationBox}
-            >Publish Result
-                </button>
+              
         </div>
     );
 }

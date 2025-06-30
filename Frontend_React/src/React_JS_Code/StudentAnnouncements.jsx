@@ -8,7 +8,7 @@ function StudentAnnouncements() {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                const response = await axios.post('http://localhost:3000/announcement');
+                const response = await axios.get('http://localhost:3000/announcement'); // Use GET
                 setAnnouncements(response.data);
             } catch (err) {
                 console.error(err);
@@ -34,7 +34,7 @@ function StudentAnnouncements() {
                             padding: '15px',
                             borderRadius: '8px'
                         }}>
-                            {item.announcement}
+                            {item.announcement_text}
                         </li>
                     ))}
                 </ul>

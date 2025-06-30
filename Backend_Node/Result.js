@@ -14,18 +14,21 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
+
     try {
         const result = await client.query(
-            `SELECT * FROM Result WHERE ID = $1 AND Published = TRUE`,
+            `SELECT * FROM Result WHERE Student_Id = $1`,
             [id]
         );
+
         if (result.rows.length === 0) {
-            return res.status(403).json({ error: 'Result not published or not found.' });
+            return res.status(404).json({ error: 'No results found for this student.' });
         }
-        res.json(result.rows[0]);
+
+        res.json(result.rows); // return array of results
     } catch (err) {
-        console.error('Error fetching student result:', err);
-        res.status(500).json({ error: 'Failed to fetch result.' });
+        console.error('Error fetching student results:', err);
+        res.status(500).json({ error: 'Failed to fetch results.' });
     }
 });
 
